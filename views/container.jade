@@ -1,0 +1,53 @@
+extends layoutin
+
+block object_row
+  tr(class="ajax-update status_up", data-update-interval="2500",)
+    td(class="sortable anchor normal_column")
+      a(href="/container/#{container.name}/object/#{object.name}/download", class="") #{object.name}
+    td(class="sortable nowrap-col normal_column")
+      ul
+        li Object Content Type: #{object.contentType}
+        li Size: #{object.bytes}
+        li Last Modified: #{object.lastModified}
+    td(class="actions_column", style="width:300px")
+      div(class="btn-group")
+        a(href="/container/#{container.name}/object/#{object.name}/download", class="btn btn-small ajax-modal btn-view") Download
+        a(href="/container/#{container.name}/object/#{object.name}/delete", class="btn btn-small ajax-modal btn-view") Delete
+
+
+block empty_container
+  tr(class="ajax-update status_up", data-update-interval="2500")
+    td(class="sortable anchor normal_column", style="height:80px;", colspan="2") You do not have any objects in this container, use the top right button to upload new objects.
+    td(class="actions_column", style="width:300px")
+
+
+block content
+  div(id="msg") #{container.msg}
+  div(id="browser_wrapper", class="pull-left")
+    div(class="navigation_wrapper")
+      div(class="table_wrapper")
+        form(class="ng-pristine ng-valid", action="/container/#{container.name}/object", method="POST", name="newObjectForm", enctype="multipart/form-data")
+          table(decay_constant="1", id="containers", class="table table-bordered table-striped datatable")
+            thead
+              tr(class="table_caption")
+                th(class="table_header", colspan="2")
+                  div(class="table_header", style="font-family:anivers; font-size:24px;")
+                    span Objects for 
+                    a(href="/container") #{container.name}
+                  div(class="table_actions clearfix")
+                th(class="table_header")
+                  input(name="object_name", value="new_object", class="form-field", type="file")
+                  br
+                  a(href="javascript:document.newObjectForm.submit();",title="Upload Object", class="btn btn-small ajax-modal btn-create") Upload Object
+            tbody
+              - var container_size = container.count
+              if container_size > 0
+                each object in objects
+                  block object_row
+              else
+                block empty_container
+    div(class="tfoot")
+      if container_size > 1
+        span(class="navigation_table_count") Displaying #{ container_size } items
+      else
+        span(class="navigation_table_count") Displaying #{ container_size } item

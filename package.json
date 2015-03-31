@@ -1,0 +1,19 @@
+{
+  "name": "test-object-storage-openstack-demo",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "pkgcloud": "*",
+    "express": "3.4.7",
+    "jade": "*",
+    "request": "*",
+    "underscore": "*",
+    "needle" : "*",
+    "async" : "*",
+    "body-parser" : "*",
+    "express-session" : "*"
+  }
+}

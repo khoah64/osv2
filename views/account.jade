@@ -1,0 +1,54 @@
+extends layoutin
+
+block container_row
+  tr(class="ajax-update status_up", data-display="#{container.name}", data-object-id="#{container.name}", data-update-interval="2500", id="#{container.name}")
+    td(class="sortable anchor normal_column")
+      a(href="/container/#{container.name}/object", class="") #{container.name}
+    td(class="sortable nowrap-col normal_column")
+      ul
+        li Object Count: #{container.count}
+        li Size: #{container.bytes} bytes
+        
+    td(class="actions_column", style="width:300px")
+      div(class="btn-group")
+        a(href="/container/#{container.name}/object", class="btn btn-small ajax-modal btn-view") View Details
+        if container.count == 0
+          a(href="/container/#{container.name}/delete", class="btn btn-small ajax-modal btn-view") Delete
+
+
+block empty_account
+  tr(class="ajax-update status_up", data-update-interval="2500", id="containers__nothing")
+    td(class="sortable anchor normal_column", style="height:80px;", colspan="2") You do not have any containers, use the top right button to create new containers.
+    td(class="actions_column", style="width:300px")
+
+
+block content
+  div(id="msg") #{msg}
+  div(id="browser_wrapper", class="pull-left")
+    div(class="navigation_wrapper")
+      div(class="table_wrapper")
+        form(class="ng-pristine ng-valid", action="/container", method="POST", name="newContainerForm")
+          table(decay_constant="1", id="containers", class="table table-bordered table-striped datatable")
+            thead
+              tr(class="table_caption")
+                th(class="table_header", colspan="2")
+                  div(class="table_header", style="font-family:anivers; font-size:24px;")
+                    span Containers for 
+                    a(href="/container") #{config.username}                    
+                  div(class="table_actions clearfix")
+                th(class="table_header")
+                  input(name="container_name", value="my-container", class="form-field")
+                  br
+                  a(href="javascript:document.newContainerForm.submit();",title="Create Container", class="btn btn-small ajax-modal btn-create") Create new container
+            tbody
+              - var container_size = containers.length
+              if container_size > 0
+                each container in containers
+                  block container_row
+              else
+                block empty_account
+    div(class="tfoot")
+      if account_size > 1
+        span(class="navigation_table_count") Displaying #{ account_size } items
+      else
+        span(class="navigation_table_count") Displaying #{ account_size } item

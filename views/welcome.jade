@@ -1,0 +1,28 @@
+extends layout
+
+block content
+  div(id="browser_wrapper", class="pull-left")
+    form(class="ng-pristine ng-valid", action="/login/", method="POST", name="loginForm")
+      table(decay_constant="1", id="containers", class="table table-bordered table-striped datatable")
+        thead
+          tr(class="table_caption")
+            th(class="table_header")
+              div(class="table_header") #{msg}
+              div()
+                label User:
+                input(name="userid", value="", class="form-field")
+                br
+                label Password:
+                input(name="password", type="", value="", class="form-field")
+                br
+                label Project:
+                input(name="project", value="", class="form-field")
+                br
+                label Region:
+                input(name="region", value="", class="form-field")
+                br
+                label Keystone Auth URL:
+                input(name="auth", type="url", value="", class="form-field")
+                br
+                a(href="javascript:document.loginForm.submit();",title="Login to BlueBox", class="btn btn-small ajax-modal btn-create", style="font-size:16px;") Connect
+              div(class="table_actions clearfix")

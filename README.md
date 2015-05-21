@@ -11,15 +11,15 @@ With it you can create containers, upload and download objects.
 To run from the Eclipse IDE you will need the Nodeclipse feature installed.   You can get it from the Eclipse 
 Marketplace.  From within Eclipse: Help -> Eclipse MarketPlace.
 
+Run npm install from top directory: object-storage-openstack-demo
+
+To run locally, **update createClient method in storage.js with your Cloud credentials**
+
+To run in Bluemix, bind it to an object storage instance.
 
 ## Developing
 
-This application requires the following node modules:
-	1. express
-	2. jade
-	3. pkgcloud
-	4. request
-	5. underscore
+
 
 
 ### Tools

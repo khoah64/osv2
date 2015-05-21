@@ -10,6 +10,7 @@ var vcap_creds = null;
 var vcap_secret = null;
 //exports.cloud_creds = null;
 var api = null;
+var localhost = process.env.VCAP_APP_HOST ? false : true;
 
 /********************************************************************************************
  * Get the binding credentials from the VCAP services environment variable
@@ -103,22 +104,36 @@ var getContainers = function(req, res) {
 
 exports.welcome = function(req, res) {
 	console.log("called welcome");
-	getCloudCredentials(function(err, cloud_creds) {
-		if (err) {
-			res.render('welcome', {msg: 'Error getting cloud credentials'});
-		}
-		else {
-			storageAPI.storageInit(cloud_creds);
-			async.series([function(callback) {
-				console.log('got api calling createclient');
-				storageAPI.createClient(function() {
-					callback();
-				});
-			} ], function() {
-				getContainers(req, res);
-			});
-		}
-	});
+
+    if (localhost) {
+
+        async.series([function (callback) {
+
+            storageAPI.createClient(function () {
+                callback();
+            });
+        }], function () {
+            getContainers(req, res);
+        });
+    } else {
+
+        getCloudCredentials(function (err, cloud_creds) {
+            if (err) {
+                res.render('welcome', {msg: 'Error getting cloud credentials'});
+            }
+            else {
+                storageAPI.storageInit(cloud_creds);
+                async.series([function (callback) {
+                    console.log('got api calling createclient');
+                    storageAPI.createClient(function () {
+                        callback();
+                    });
+                }], function () {
+                    getContainers(req, res);
+                });
+            }
+        });
+    }
 };
 
 exports.logout = function(req, res) {

@@ -5,6 +5,7 @@ var async = require('async');
 
 exports.cloud_creds = null;
 var client = null;
+var localhost = process.env.VCAP_APP_HOST ? false : true;
 
 exports.storageInit = function(cloud_creds) {
 	console.log('storageInit entry');
@@ -18,6 +19,24 @@ exports.createClient = function(callback) {
 	console.log('storageAPI.createClient entry');
   
 	if (!client) {
+
+        if (localhost) {
+            console.log('running on localhost.. using hardcoded credentials in createclient');
+
+
+            exports.cloud_creds = {};
+            exports.cloud_creds.CloudIntegration = {};
+            exports.cloud_creds.CloudIntegration.credentials = {};
+
+            // LOCALHOST: UPDATE THESE CREDENTIALS WITH YOURS !!!!
+            exports.cloud_creds.CloudIntegration.credentials.userid = 'petersca@us.ibm.com';
+            exports.cloud_creds.CloudIntegration.credentials.password = 'hQQa8R5LRa.GnQs{';
+            exports.cloud_creds.CloudIntegration.project = '71268c4b-c023-47b1-a17c-36dbac6d7818';
+            exports.cloud_creds.CloudIntegration.region = 'dal09';
+            exports.cloud_creds.CloudIntegration.sdk_auth_url = 'https://qint-keystone.open-test.ibmcloud.com';
+            // END LOCALHOST
+        }
+
 		console.log('storageAPI calling pkgcloud');
 		async.series([function(callback) {
 			console.log("createclient:", exports.cloud_creds);
